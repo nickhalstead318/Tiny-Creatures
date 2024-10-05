@@ -48,6 +48,9 @@ public class PlayerBehavior : MonoBehaviour
     // Misc
     private GameObject _gameManager;
 
+    // Debug
+    private AbilityBehavior _fireGun;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,6 +63,8 @@ public class PlayerBehavior : MonoBehaviour
 
         // Add reference to Game Manager
         _gameManager = GameObject.FindGameObjectWithTag("Manager");
+
+        _fireGun = new ShootBulletBehavior(transform.gameObject);
     }
 
     // Update is called once per frame
@@ -82,8 +87,8 @@ public class PlayerBehavior : MonoBehaviour
             ActivateDash();
         }
 
-        float currentBoost = Mathf.Max(1, Convert.ToInt32(_dashActive) * _dashMultiplier);
-        transform.position += (xDir * Vector3.right + yDir * Vector3.up) * _playerSpeed * currentBoost * Time.deltaTime;
+        float currentSpeed = CalcCurrentSpeed();
+        transform.position += (xDir * Vector3.right + yDir * Vector3.up) * currentSpeed * Time.deltaTime;
 
         if (_iFrameActive && _iFrameTime <= Time.time)
         {
@@ -178,27 +183,26 @@ public class PlayerBehavior : MonoBehaviour
         switch(attack)
         {
             case Attacks.Attack1:
-                //Debug.Log("Firing attack 1!");
-                Vector3 mouseScreenPosition = Input.mousePosition;
-                Debug.Log("Mouse screen pos: (" +  mouseScreenPosition.x + ", " + mouseScreenPosition.y + ")");
-                Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mouseScreenPosition.x, mouseScreenPosition.y, Camera.main.nearClipPlane));
-                Debug.Log("Mouse world pos: (" + mouseWorldPosition.x + ", " + mouseWorldPosition.y + ")");
-                mouseWorldPosition.z = 0f;
-                Vector3 directionToMouse = mouseWorldPosition - transform.position;
-                Debug.Log("Direction to mouse pos: (" + directionToMouse.x + ", " + directionToMouse.y + ")");
-                directionToMouse.Normalize();
-                Debug.Log("Normalize to mouse pos: (" + directionToMouse.x + ", " + directionToMouse.y + ")");
-                Vector3 spawnLocation = directionToMouse + transform.position;
-                Debug.Log("Spawn pos: (" + spawnLocation.x + ", " + directionToMouse.y + ")");
-                GameObject bullet = Instantiate(_attack1, spawnLocation, Quaternion.identity);
-                bullet.GetComponent<BulletBehavior>().SetDir(directionToMouse);
+                _fireGun.TryToActivate(_attack1);
                 break;
             default: break;
         }
     }
+    
+    public float CalcCurrentSpeed()
+    {
+        float currentBoost = Mathf.Max(1, Convert.ToInt32(_dashActive) * _dashMultiplier);
+        return currentBoost * _playerSpeed;
+    }
 
+    // Getters
     public int GetHealth()
     {
         return _playerHealth;
+    }
+
+    public float GetSpeed()
+    {
+        return _playerSpeed;
     }
 }
