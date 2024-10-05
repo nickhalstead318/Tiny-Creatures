@@ -100,8 +100,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerSpeed: 5
+  _boostMultiplier: 2.5
   _playerHealth: 100
+  _boostActive: 0
+  _boostTime: 0
+  _boostTimeStart: 0
   _iFrameLength: 500
+  _boostLength: 500
+  _boostCoolDown: 3000
 --- !u!50 &2355665028509868671
 Rigidbody2D:
   serializedVersion: 4

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -9,13 +10,24 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField]
     private float _playerSpeed = 5.0f;
 
+    public float _boostMultiplier = 2.5f;
+
     [SerializeField]
     private int _playerHealth = 100;
     private bool _iFrameActive = false;
-    private float _iFrameTime = 0;
+
+    public bool _boostActive = false;
+    private float _iFrameTime;
+
+    public float _boostTime;
+
+    public float _boostTimeStart = 0;
 
     [SerializeField]
-    private float _iFrameLength = 500;
+    private float _iFrameLength = 500f; //ms
+
+    public float _boostLength = 50f; //ms
+    public float _boostCoolDown = 3000f; //ms
 
     // Start is called before the first frame update
     void Start()
@@ -32,12 +44,24 @@ public class PlayerBehavior : MonoBehaviour
     {
         float xDir = Input.GetAxis("Horizontal");
         float yDir = Input.GetAxis("Vertical");
-        
-        transform.position += (xDir * Vector3.right + yDir * Vector3.up) * _playerSpeed * Time.deltaTime;
+
+        if (!_boostActive && Input.GetAxis("Jump") > 0 && Time.time > _boostTimeStart)
+        {
+            ActivateBoost();
+        }
+
+        float currentBoost = Mathf.Max(1, Convert.ToInt32(_boostActive) * _boostMultiplier);
+        transform.position += (xDir * Vector3.right + yDir * Vector3.up) * _playerSpeed * currentBoost * Time.deltaTime;
 
         if (_iFrameActive && _iFrameTime <= Time.time)
         {
             _iFrameActive = false;
+        }
+
+        if (_boostActive && _boostTime <= Time.time)
+        {
+            _boostActive = false;
+            _boostTimeStart = Time.time + _boostCoolDown / 1000;
         }
     }
 
@@ -63,6 +87,15 @@ public class PlayerBehavior : MonoBehaviour
         //{
         //    Destroy(this);
         //}
+    }
+
+    void ActivateBoost()
+    {
+        if (!_boostActive)
+        {
+            _boostActive = true;
+            _boostTime = Time.time + _boostLength/1000;
+        }
     }
 
     public int GetHealth()
