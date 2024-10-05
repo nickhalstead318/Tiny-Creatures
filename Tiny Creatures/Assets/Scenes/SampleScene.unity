@@ -520,6 +520,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4581274442087108393, guid: d2dee86bc25e11143994ffed0a68dfde,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 4.277792
+      objectReference: {fileID: 0}
+    - target: {fileID: 4581274442087108393, guid: d2dee86bc25e11143994ffed0a68dfde,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 3.8280396
+      objectReference: {fileID: 0}
+    - target: {fileID: 4581274442087108393, guid: d2dee86bc25e11143994ffed0a68dfde,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.024656177
+      objectReference: {fileID: 0}
+    - target: {fileID: 4581274442087108393, guid: d2dee86bc25e11143994ffed0a68dfde,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.22576785
+      objectReference: {fileID: 0}
     - target: {fileID: 6078897247034578727, guid: d2dee86bc25e11143994ffed0a68dfde,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -587,6 +607,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1521427628427418430, guid: 3910423da01842646a711d315c0dab7c,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 4.6835804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521427628427418430, guid: 3910423da01842646a711d315c0dab7c,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 4.754876
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521427628427418430, guid: 3910423da01842646a711d315c0dab7c,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.05941248
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521427628427418430, guid: 3910423da01842646a711d315c0dab7c,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3085038810947018900, guid: 3910423da01842646a711d315c0dab7c,
         type: 3}
       propertyPath: m_LocalPosition.x
