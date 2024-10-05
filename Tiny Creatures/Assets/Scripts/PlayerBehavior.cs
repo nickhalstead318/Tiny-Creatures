@@ -18,6 +18,12 @@ public class PlayerBehavior : MonoBehaviour
 
     [SerializeField]
     private AudioSource damageSound; // When player gets hit
+    private SpriteRenderer spriteRenderer;
+    [SerializeField]
+    private Color damageColor = Color.red;  // Color to flash when hit
+    [SerializeField]
+    private float flashDuration = 0.1f;     // How long the flash lasts
+    private Color originalColor; // Revert to this after taking damage
 
     // Is player currently invincible / dashing
     private bool _iFrameActive = false;
@@ -43,6 +49,10 @@ public class PlayerBehavior : MonoBehaviour
         // Starting position
         transform.position = new Vector3(0, 0, 0);
 
+        // Original color
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = spriteRenderer.color;
+
         // Add reference to Game Manager
         _gameManager = GameObject.FindGameObjectWithTag("Manager");
     }
@@ -51,6 +61,8 @@ public class PlayerBehavior : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+
+        CalculateAttacks();
     }
 
     // Calculates everything related to movement
@@ -98,6 +110,8 @@ public class PlayerBehavior : MonoBehaviour
         {
             ActivateIFrames(_iFrameLength);
 
+            StartCoroutine(FlashDamageCoroutine());
+
             // Play damage sound
             if (damageSound != null)
             {
@@ -111,6 +125,13 @@ public class PlayerBehavior : MonoBehaviour
             Destroy(transform.gameObject);
             _gameManager.GetComponent<GameManagerBehavior>().OnPlayerDeath();
         }
+    }
+
+    private IEnumerator FlashDamageCoroutine()
+    {
+        spriteRenderer.color = damageColor;
+        yield return new WaitForSeconds(flashDuration);
+        spriteRenderer.color = originalColor;
     }
 
     // This activates the player's dash
@@ -130,6 +151,32 @@ public class PlayerBehavior : MonoBehaviour
     {
         _iFrameActive = true;
         _iFrameTime = Time.time + frameLength;
+    }
+
+    void CalculateAttacks()
+    {
+        float att1 = Input.GetAxis("Fire1");
+        
+        if (att1 > 0)
+        {
+
+        }
+    }
+
+    enum Attacks
+    {
+        Attack1
+    }
+
+    void FireAttack(Attacks attack)
+    {
+        switch(attack)
+        {
+            case Attacks.Attack1:
+                Debug.Log("Firing attack 1!");
+                break;
+            default: break;
+        }
     }
 
     public int GetHealth()

@@ -104,6 +104,8 @@ MonoBehaviour:
   _dashMultiplier: 2.5
   _playerHealth: 100
   damageSound: {fileID: 5587551160179500860}
+  damageColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.1
   _iFrameLength: 0.5
   _dashLength: 0.25
   _dashCoolDown: 2.5
