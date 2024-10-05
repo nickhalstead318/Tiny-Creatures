@@ -8,26 +8,29 @@ public class PlayerBehavior : MonoBehaviour
 {
 
     [SerializeField]
-    private float _playerSpeed = 5.0f;
+    private float _playerSpeed = 5.0f; // Speed of player
 
-    public float _boostMultiplier = 2.5f;
+    [SerializeField]
+    private float _dashMultiplier = 2.5f; // Speed multiplier
 
     [SerializeField]
     private int _playerHealth = 100;
+
+    // Is player currently invincible / dashing
     private bool _iFrameActive = false;
+    private bool _dashActive = false;
 
-    public bool _boostActive = false;
+    // Time in (s)econds iframe/dash ends from game start
     private float _iFrameTime;
+    private float _dashTime;
 
-    public float _boostTime;
-
-    public float _boostTimeStart = 0;
+    private float _dashTimeStart = 0; // Time in (s)econds dash can be activated again from game start
 
     [SerializeField]
-    private float _iFrameLength = 500f; //ms
+    private float _iFrameLength = 0.5f; // Length of iframes in (s)econds
 
-    public float _boostLength = 50f; //ms
-    public float _boostCoolDown = 3000f; //ms
+    public float _dashLength = 0.05f; // Length of dash in (s)econds
+    public float _dashCoolDown = 3.0f; // Length of dash cooldown in (s)econds
 
     // Start is called before the first frame update
     void Start()
@@ -42,15 +45,22 @@ public class PlayerBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CalculateMovement();
+    }
+
+    // Calculates everything related to movement
+    private void CalculateMovement()
+    {
         float xDir = Input.GetAxis("Horizontal");
         float yDir = Input.GetAxis("Vertical");
 
-        if (!_boostActive && Input.GetAxis("Jump") > 0 && Time.time > _boostTimeStart)
+        // If not dashing, player tries to dash, and not on cooldown
+        if (!_dashActive && Input.GetAxis("Jump") > 0 && Time.time > _dashTimeStart)
         {
-            ActivateBoost();
+            ActivateDash();
         }
 
-        float currentBoost = Mathf.Max(1, Convert.ToInt32(_boostActive) * _boostMultiplier);
+        float currentBoost = Mathf.Max(1, Convert.ToInt32(_dashActive) * _dashMultiplier);
         transform.position += (xDir * Vector3.right + yDir * Vector3.up) * _playerSpeed * currentBoost * Time.deltaTime;
 
         if (_iFrameActive && _iFrameTime <= Time.time)
@@ -58,13 +68,14 @@ public class PlayerBehavior : MonoBehaviour
             _iFrameActive = false;
         }
 
-        if (_boostActive && _boostTime <= Time.time)
+        if (_dashActive && _dashTime <= Time.time)
         {
-            _boostActive = false;
-            _boostTimeStart = Time.time + _boostCoolDown / 1000;
+            _dashActive = false;
+            _dashTimeStart = Time.time + _dashCoolDown;
         }
     }
 
+    // What happens when things go bump in the night?
     private void OnTriggerStay2D(Collider2D other)
     {
         if(other.gameObject.tag == "Enemy")
@@ -74,27 +85,30 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
+    // Ow! That actually hurt
     void Damage(int damage)
     {
         if (_playerHealth > 0 && !_iFrameActive)
         {
             _playerHealth = Mathf.Max(0, _playerHealth - damage);
             _iFrameActive = true;
-            _iFrameTime = Time.time + _iFrameLength/1000;
+            _iFrameTime = Time.time + _iFrameLength;
         }
 
-        //if (_playerHealth == 0) 
-        //{
-        //    Destroy(this);
-        //}
+        /**
+        if (_playerHealth == 0) {
+            Destroy(this);
+        }
+        **/
     }
 
-    void ActivateBoost()
+    // This activates the player's dash
+    void ActivateDash()
     {
-        if (!_boostActive)
+        if (!_dashActive)
         {
-            _boostActive = true;
-            _boostTime = Time.time + _boostLength/1000;
+            _dashActive = true;
+            _dashTime = Time.time + _dashLength;
         }
     }
 
