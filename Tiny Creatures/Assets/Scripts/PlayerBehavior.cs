@@ -41,7 +41,7 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if(other.gameObject.tag == "Enemy")
         {
