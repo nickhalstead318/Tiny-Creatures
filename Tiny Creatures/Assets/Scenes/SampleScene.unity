@@ -341,7 +341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac31f26b5e6a16f4e8c5ba912dd7546c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1931107516}
   offset: {x: 0, y: 0, z: -10}
   smoothSpeed: 0.25
 --- !u!1 &410087039
@@ -792,6 +792,12 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!4 &1931107516 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1843817589345041410, guid: d2dee86bc25e11143994ffed0a68dfde,
+    type: 3}
+  m_PrefabInstance: {fileID: 2105299289063391830}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2105299289063391830
 PrefabInstance:
   m_ObjectHideFlags: 0
