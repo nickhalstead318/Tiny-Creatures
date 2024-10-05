@@ -6,7 +6,7 @@ public class PlayerBehavior : MonoBehaviour
 {
 
     [SerializeField]
-    private float _playerSpeed = 3.0f;
+    private float _playerSpeed = 5.0f;
 
     // Start is called before the first frame update
     void Start()
