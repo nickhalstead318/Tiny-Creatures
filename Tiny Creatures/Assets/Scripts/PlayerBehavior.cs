@@ -16,6 +16,9 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField]
     private int _playerHealth = 100;
 
+    [SerializeField]
+    private AudioSource damageSound; // When player gets hit
+
     // Is player currently invincible / dashing
     private bool _iFrameActive = false;
     private bool _dashActive = false;
@@ -90,14 +93,20 @@ public class PlayerBehavior : MonoBehaviour
     // Ow! That actually hurt
     void Damage(int damage)
     {
+
         if (_playerHealth > 0 && !_iFrameActive)
         {
+            ActivateIFrames(_iFrameLength);
+
+            // Play damage sound
+            if (damageSound != null)
+            {
+                damageSound.Play();
+            }
+
             _playerHealth = Mathf.Max(0, _playerHealth - damage);
-
-            _iFrameActive = true;
-            _iFrameTime = Time.time + _iFrameLength;
         }
-
+        
         if (_playerHealth == 0) {
             Destroy(transform.gameObject);
             _gameManager.GetComponent<GameManagerBehavior>().OnPlayerDeath();
@@ -107,11 +116,20 @@ public class PlayerBehavior : MonoBehaviour
     // This activates the player's dash
     void ActivateDash()
     {
+        ActivateIFrames(_dashLength);
+
         if (!_dashActive)
         {
             _dashActive = true;
             _dashTime = Time.time + _dashLength;
         }
+    }
+
+    // Activate iframes for X seconds
+    void ActivateIFrames(float frameLength)
+    {
+        _iFrameActive = true;
+        _iFrameTime = Time.time + frameLength;
     }
 
     public int GetHealth()
