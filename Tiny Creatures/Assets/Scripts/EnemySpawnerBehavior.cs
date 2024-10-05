@@ -7,7 +7,7 @@ public class EnemySpawnerBehavior : MonoBehaviour
     private int _difficultyLevel = 1;
     private int _difficultyMax = 1;
     private int _timeBetweenSpawns = 1;
-    public float distFromPlayer = 9f;
+    public float distFromPlayer = 10f;
 
     private GameObject _playerObject;
     private Dictionary<Enemies, GameObject> _enemies;
@@ -15,28 +15,20 @@ public class EnemySpawnerBehavior : MonoBehaviour
     [SerializeField]
     private List<GameObject> _enemiesList;
 
-    private float timeToStop = 10f;
-    private bool _spawningActive = true;
-    private IEnumerator _spawningRoutine;
+    private IEnumerator _spawnRoutine;
 
     // Start is called before the first frame update
     void Start()
     {
         _playerObject = GameObject.FindGameObjectWithTag("Player");
-        _spawningRoutine = SpawnEnemies();
         SetupEnemies();
-        StartCoroutine(_spawningRoutine);
+        _spawnRoutine = SpawnEnemies();
     }
 
     // Update is called once per frame
     void Update()
     {
-        timeToStop -= Time.deltaTime;
-        if (timeToStop <= 0 && _spawningActive)
-        {
-            StopCoroutine(_spawningRoutine);
-            _spawningActive = false;
-        }
+
     }
 
     IEnumerator SpawnEnemies()
@@ -68,6 +60,25 @@ public class EnemySpawnerBehavior : MonoBehaviour
             }
 
             yield return new WaitForSeconds(_timeBetweenSpawns);
+        }
+    }
+
+    public void StartSpawning()
+    {
+        StartCoroutine(_spawnRoutine);
+    }
+
+    void StopSpawning()
+    {
+        StopCoroutine(_spawnRoutine);
+    }
+
+    public void OnPlayerDeath()
+    {
+        StopSpawning();
+        foreach(Transform child in transform)
+        {
+            Destroy(child.gameObject);
         }
     }
 

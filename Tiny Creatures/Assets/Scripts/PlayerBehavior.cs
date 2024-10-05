@@ -32,14 +32,16 @@ public class PlayerBehavior : MonoBehaviour
     public float _dashLength = 0.05f; // Length of dash in (s)econds
     public float _dashCoolDown = 3.0f; // Length of dash cooldown in (s)econds
 
+    private GameObject _gameManager;
+
     // Start is called before the first frame update
     void Start()
     {
         // Starting position
         transform.position = new Vector3(0, 0, 0);
 
-        // Set starting health
-        _playerHealth = 100;
+        // Add reference to Game Manager
+        _gameManager = GameObject.FindGameObjectWithTag("Manager");
     }
 
     // Update is called once per frame
@@ -91,15 +93,15 @@ public class PlayerBehavior : MonoBehaviour
         if (_playerHealth > 0 && !_iFrameActive)
         {
             _playerHealth = Mathf.Max(0, _playerHealth - damage);
+
             _iFrameActive = true;
             _iFrameTime = Time.time + _iFrameLength;
         }
 
-        /**
         if (_playerHealth == 0) {
-            Destroy(this);
+            Destroy(transform.gameObject);
+            _gameManager.GetComponent<GameManagerBehavior>().OnPlayerDeath();
         }
-        **/
     }
 
     // This activates the player's dash
