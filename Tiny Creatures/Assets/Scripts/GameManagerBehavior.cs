@@ -23,7 +23,7 @@ public class GameManagerBehavior : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehavior>();
 
         // Setup Spawner
-        _spawner.GetComponent<EnemySpawnerBehavior>().StartSpawning();
+        //_spawner.GetComponent<EnemySpawnerBehavior>().StartSpawning();
     }
 
     // Update is called once per frame

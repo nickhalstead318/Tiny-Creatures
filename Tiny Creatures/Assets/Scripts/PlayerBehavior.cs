@@ -1,21 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
-
+    // Player Constants
     [SerializeField]
     private float _playerSpeed = 5.0f; // Speed of player
-
     [SerializeField]
     private float _dashMultiplier = 2.5f; // Speed multiplier
-
     [SerializeField]
     private int _playerHealth = 100;
 
+    // Player Damage
     [SerializeField]
     private AudioSource damageSound; // When player gets hit
     private SpriteRenderer spriteRenderer;
@@ -25,6 +25,7 @@ public class PlayerBehavior : MonoBehaviour
     private float flashDuration = 0.1f;     // How long the flash lasts
     private Color originalColor; // Revert to this after taking damage
 
+    // Status Effects
     // Is player currently invincible / dashing
     private bool _iFrameActive = false;
     private bool _dashActive = false;
@@ -37,10 +38,14 @@ public class PlayerBehavior : MonoBehaviour
 
     [SerializeField]
     private float _iFrameLength = 0.5f; // Length of iframes in (s)econds
-
     public float _dashLength = 0.05f; // Length of dash in (s)econds
     public float _dashCoolDown = 3.0f; // Length of dash cooldown in (s)econds
 
+    // Player Attacks
+    [SerializeField]
+    private GameObject _attack1;
+
+    // Misc
     private GameObject _gameManager;
 
     // Start is called before the first frame update
@@ -157,9 +162,9 @@ public class PlayerBehavior : MonoBehaviour
     {
         float att1 = Input.GetAxis("Fire1");
         
-        if (att1 > 0)
+        if (att1 > 0 && _attack1 != null)
         {
-
+            FireAttack(Attacks.Attack1);
         }
     }
 
@@ -173,7 +178,20 @@ public class PlayerBehavior : MonoBehaviour
         switch(attack)
         {
             case Attacks.Attack1:
-                Debug.Log("Firing attack 1!");
+                //Debug.Log("Firing attack 1!");
+                Vector3 mouseScreenPosition = Input.mousePosition;
+                Debug.Log("Mouse screen pos: (" +  mouseScreenPosition.x + ", " + mouseScreenPosition.y + ")");
+                Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mouseScreenPosition.x, mouseScreenPosition.y, Camera.main.nearClipPlane));
+                Debug.Log("Mouse world pos: (" + mouseWorldPosition.x + ", " + mouseWorldPosition.y + ")");
+                mouseWorldPosition.z = 0f;
+                Vector3 directionToMouse = mouseWorldPosition - transform.position;
+                Debug.Log("Direction to mouse pos: (" + directionToMouse.x + ", " + directionToMouse.y + ")");
+                directionToMouse.Normalize();
+                Debug.Log("Normalize to mouse pos: (" + directionToMouse.x + ", " + directionToMouse.y + ")");
+                Vector3 spawnLocation = directionToMouse + transform.position;
+                Debug.Log("Spawn pos: (" + spawnLocation.x + ", " + directionToMouse.y + ")");
+                GameObject bullet = Instantiate(_attack1, spawnLocation, Quaternion.identity);
+                bullet.GetComponent<BulletBehavior>().SetDir(directionToMouse);
                 break;
             default: break;
         }
