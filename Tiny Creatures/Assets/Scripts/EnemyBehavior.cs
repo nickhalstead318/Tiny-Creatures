@@ -20,7 +20,7 @@ abstract public class EnemyBehavior : MonoBehaviour
     protected virtual void Start()
     {
         _playerObject = GameObject.FindGameObjectWithTag("Player");
-        _experienceGem = GameObject.FindGameObjectWithTag("Spawner");
+        _experienceGem = GameObject.FindGameObjectWithTag("Spawner").GetComponent<EnemySpawnerBehavior>().experienceGem;
     }
 
     // Update is called once per frame

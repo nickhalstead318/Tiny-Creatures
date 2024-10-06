@@ -6,14 +6,15 @@ public class EnemySpawnerBehavior : MonoBehaviour
 {
     private int _difficultyLevel = 1;
     private int _difficultyMax = 1;
-    private int _timeBetweenSpawns = 1;
+
+    [SerializeField]
+    private float _timeBetweenSpawns = 1f;
     public float distFromPlayer = 10f;
 
     private GameObject _playerObject;
     private Dictionary<Enemies, GameObject> _enemies;
+    public GameObject experienceGem;
 
-    [SerializeField]
-    private GameObject _experienceGem;
     [SerializeField]
     private List<GameObject> _enemiesList;
 
