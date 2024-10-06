@@ -110,7 +110,7 @@ MonoBehaviour:
   _iFrameLength: 0.5
   _dashLength: 0.3
   _dashCoolDown: 2.5
-  _attack1: {fileID: 7474858115586984181, guid: 89c74d2e2ebf5f141851c00e5754f71b,
+  _attack1: {fileID: 1988681443819048972, guid: b0c389dcca6fafb41b52e44c993c3472,
     type: 3}
 --- !u!50 &2355665028509868671
 Rigidbody2D:
