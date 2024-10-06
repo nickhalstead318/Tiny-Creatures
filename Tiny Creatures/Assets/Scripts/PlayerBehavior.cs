@@ -13,7 +13,9 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField]
     private float _dashMultiplier = 2.5f; // Speed multiplier
     [SerializeField]
-    private int _playerHealth = 100;
+    private int _maxHealth = 100;
+    [SerializeField]
+    private int _playerHealth;
 
     // Player Damage
     [SerializeField]
@@ -60,6 +62,9 @@ public class PlayerBehavior : MonoBehaviour
     {
         // Starting position
         transform.position = new Vector3(0, 0, 0);
+
+        // Starting Health
+        _playerHealth = _maxHealth;
 
         // Original color
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -137,13 +142,19 @@ public class PlayerBehavior : MonoBehaviour
                 damageSound.Play();
             }
 
-            _playerHealth = Mathf.Max(0, _playerHealth - damage);
+            UpdateHealth(-1 * damage);
         }
         
         if (_playerHealth == 0) {
             Destroy(transform.gameObject);
             _gameManager.GetComponent<GameManagerBehavior>().OnPlayerDeath();
         }
+    }
+
+    void UpdateHealth(int change)
+    {
+        _playerHealth = Mathf.Clamp(_playerHealth + change, 0, _maxHealth);
+        _gameManager.GetComponent<GameManagerBehavior>().UpdatePlayerHealth(_playerHealth, _maxHealth);
     }
 
     private IEnumerator FlashDamageCoroutine()

@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Manager
   - Spawner
+  - Experience Gem
   layers:
   - Default
   - TransparentFX

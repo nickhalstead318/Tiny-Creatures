@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManagerBehavior : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _healthText;
+    public GameObject healthText;
+    public Slider healthSlider;
+    public Image healthImage;
+    public Gradient healthGradient;
+
     [SerializeField]
     private GameObject _gameOverText;
     [SerializeField]
@@ -36,7 +41,7 @@ public class GameManagerBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _healthText.GetComponent<TMP_Text>().text = "Health: " + _player.GetHealth();
+        
     }
 
     public void OnPlayerDeath()
@@ -49,5 +54,13 @@ public class GameManagerBehavior : MonoBehaviour
     public void ResetScene()
     {
         SceneManager.LoadScene("SampleScene");
+    }
+
+    public void UpdatePlayerHealth(int currHealth,int maxHealth)
+    {
+        healthText.GetComponent<TMP_Text>().text = currHealth + "/" + maxHealth;
+        healthSlider.maxValue = maxHealth;
+        healthSlider.value = currHealth;
+        healthImage.color = healthGradient.Evaluate(healthSlider.normalizedValue);
     }
 }
