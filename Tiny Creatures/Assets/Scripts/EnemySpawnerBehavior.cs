@@ -13,6 +13,8 @@ public class EnemySpawnerBehavior : MonoBehaviour
     private Dictionary<Enemies, GameObject> _enemies;
 
     [SerializeField]
+    private GameObject _experienceGem;
+    [SerializeField]
     private List<GameObject> _enemiesList;
 
     private IEnumerator _spawnRoutine;

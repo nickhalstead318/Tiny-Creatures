@@ -8,6 +8,9 @@ public class BulletBehavior : MonoBehaviour
     [SerializeField]
     private float _speed = 15.0f;
 
+    [SerializeField]
+    private int _damage = 5;
+
     private Vector3 _direction;
     private Vector3 _fireVelocity;
     private float _lifespan = 1.5f;
@@ -23,17 +26,26 @@ public class BulletBehavior : MonoBehaviour
     public void SetDir(Vector3 dir, Vector3 fireVelocity)
     {
         _direction = dir;
-        _fireVelocity = fireVelocity;
-        Debug.Log("Fire Velocity: " + fireVelocity);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //transform.position += (_speed * _direction + _fireVelocity) * Time.deltaTime;
+        transform.position += (_speed * _direction) * Time.deltaTime;
         if(Time.time >= _timeToDestroy)
         {
             Destroy(transform.gameObject);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy")
+        {
+            Debug.Log("Collided!");
+            Destroy(transform.gameObject);
+            EnemyBehavior enemy = collision.GetComponent<EnemyBehavior>();
+            enemy.Damage(_damage);
         }
     }
 }

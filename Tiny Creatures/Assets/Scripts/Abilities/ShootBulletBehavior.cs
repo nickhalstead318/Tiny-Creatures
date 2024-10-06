@@ -21,17 +21,20 @@ public class ShootBulletBehavior : AbilityBehavior
         Vector3 directionToMouse = mouseWorldPosition - _playerObject.transform.position;
 
         directionToMouse.Normalize();
-        float xDir = Input.GetAxis("Horizontal");
-        float yDir = Input.GetAxis("Vertical");
-        Vector3 firingVelocity = (xDir * Vector3.right + yDir*Vector3.up).normalized * _playerObject.GetComponent<PlayerBehavior>().CalcCurrentSpeed();
+        //float xDir = Input.GetAxis("Horizontal");
+        //float yDir = Input.GetAxis("Vertical");
+        //Vector3 firingVelocity = (xDir * Vector3.right + yDir*Vector3.up).normalized * _playerObject.GetComponent<PlayerBehavior>().CalcCurrentSpeed();
 
-        Debug.Log("Mouse: " + mouseWorldPosition.x + ", " + mouseWorldPosition.y);
-        Debug.Log("Player: " + _playerObject.transform.position.x + ", " + _playerObject.transform.position.y);
+        //Debug.Log("Mouse: " + mouseWorldPosition.x + ", " + mouseWorldPosition.y);
+        //Debug.Log("Player: " + _playerObject.transform.position.x + ", " + _playerObject.transform.position.y);
         
         Vector3 spawnLocation = directionToMouse + _playerObject.transform.position;
-        
+
         GameObject bullet = GameObject.Instantiate(abilityObject, spawnLocation, Quaternion.identity);
-        bullet.GetComponent<Rigidbody>().velocity = (15f * directionToMouse + firingVelocity);
-        //bullet.GetComponent<BulletBehavior>().SetDir(directionToMouse,firingVelocity);
+        int spriteLayer = LayerMask.NameToLayer("Sprites");
+        bullet.layer = spriteLayer;
+
+        bullet.transform.Rotate(0, 0, (Mathf.Rad2Deg*Mathf.Atan2(directionToMouse.y, directionToMouse.x)-90f));
+        bullet.GetComponent<BulletBehavior>().SetDir(directionToMouse,Vector3.zero);
     }
 }

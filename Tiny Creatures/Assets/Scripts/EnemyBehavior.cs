@@ -12,10 +12,15 @@ abstract public class EnemyBehavior : MonoBehaviour
     [SerializeField]
     private int _collisionDamage = 5;
 
+    protected int health;
+    protected int totalXP;
+    private GameObject _experienceGem;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
         _playerObject = GameObject.FindGameObjectWithTag("Player");
+        _experienceGem = GameObject.FindGameObjectWithTag("Spawner");
     }
 
     // Update is called once per frame
@@ -36,5 +41,18 @@ abstract public class EnemyBehavior : MonoBehaviour
     public int GetCollisionDamage()
     {
         return _collisionDamage;
+    }
+
+    public void Damage(int damage)
+    {
+        health = Mathf.Max(0, health - damage);
+        if (health == 0)
+        {
+            for(int i = 0; i < totalXP; i++)
+            {
+                Instantiate(_experienceGem, new Vector3(Random.Range(-0.5f,0.5f), Random.Range(-0.5f, 0.5f), 0) + transform.position, Quaternion.identity);
+            }
+            Destroy(transform.gameObject);
+        }
     }
 }

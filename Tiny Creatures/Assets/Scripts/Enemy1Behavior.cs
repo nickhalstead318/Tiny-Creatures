@@ -7,6 +7,8 @@ public class Enemy1Behavior : EnemyBehavior
     // Start is called before the first frame update
     protected override void Start()
     {
+        health = 10;
+        totalXP = 1;
         base.Start();
     }
 
