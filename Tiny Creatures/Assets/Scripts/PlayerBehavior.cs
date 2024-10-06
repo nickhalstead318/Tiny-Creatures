@@ -41,6 +41,8 @@ public class PlayerBehavior : MonoBehaviour
     public float _dashLength = 0.05f; // Length of dash in (s)econds
     public float _dashCoolDown = 3.0f; // Length of dash cooldown in (s)econds
 
+    private Vector3 _currentVelocity;
+
     // Player Attacks
     [SerializeField]
     private GameObject _attack1;
@@ -88,7 +90,12 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         float currentSpeed = CalcCurrentSpeed();
-        transform.position += (xDir * Vector3.right + yDir * Vector3.up) * currentSpeed * Time.deltaTime;
+        _currentVelocity = (xDir * Vector3.right + yDir * Vector3.up) * currentSpeed * Time.deltaTime;
+        Vector3 newPos = transform.position + _currentVelocity;
+        transform.position = Mathf.Clamp(newPos.x, -34, 24) * Vector3.right + Mathf.Clamp(newPos.y, -24, 34) * Vector3.up;
+
+        //transform.position += (xDir * Vector3.right + yDir * Vector3.up) * currentSpeed * Time.deltaTime;
+
 
         if (_iFrameActive && _iFrameTime <= Time.time)
         {
@@ -165,6 +172,11 @@ public class PlayerBehavior : MonoBehaviour
 
     void CalculateAttacks()
     {
+        if (_currentVelocity.sqrMagnitude > 0)
+        {
+            return;
+        }
+
         float att1 = Input.GetAxis("Fire1");
         
         if (att1 > 0 && _attack1 != null)

@@ -12,6 +12,8 @@ public class GameManagerBehavior : MonoBehaviour
     private GameObject _gameOverText;
     [SerializeField]
     private GameObject _resetButton;
+    
+    public AudioSource currentMusic;
 
     private PlayerBehavior _player;
     [SerializeField]
@@ -24,6 +26,11 @@ public class GameManagerBehavior : MonoBehaviour
 
         // Setup Spawner
         _spawner.GetComponent<EnemySpawnerBehavior>().StartSpawning();
+
+        if ( currentMusic != null )
+        {
+            currentMusic.Play();
+        }
     }
 
     // Update is called once per frame
