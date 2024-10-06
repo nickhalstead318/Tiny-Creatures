@@ -16,10 +16,13 @@ public class PlayerBehavior : MonoBehaviour
     private int _maxHealth = 100;
     [SerializeField]
     private int _playerHealth;
+    [SerializeField]
+    private int _currentXp = 0;
+    private int _xpToNextLevel = 15;
+    private int _playerLevel = 1;
 
     // Player Damage
-    [SerializeField]
-    private AudioSource damageSound; // When player gets hit
+    public AudioClip damageSound; // When player gets hit
     private SpriteRenderer spriteRenderer;
     [SerializeField]
     private Color damageColor = Color.red;  // Color to flash when hit
@@ -28,6 +31,10 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField]
     private float flashDuration = 0.1f;     // How long the flash lasts
     private Color originalColor; // Revert to this after taking damage
+
+    // Experience
+    [SerializeField]
+    public AudioClip xpSound; // When player gets hit
 
     // Status Effects
     // Is player currently invincible / dashing
@@ -52,7 +59,7 @@ public class PlayerBehavior : MonoBehaviour
     private GameObject _attack1;
 
     // Misc
-    private GameObject _gameManager;
+    private GameManagerBehavior _gameManager;
 
     // Debug
     private AbilityBehavior _fireGun;
@@ -71,7 +78,7 @@ public class PlayerBehavior : MonoBehaviour
         originalColor = spriteRenderer.color;
 
         // Add reference to Game Manager
-        _gameManager = GameObject.FindGameObjectWithTag("Manager");
+        _gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerBehavior>();
 
         _fireGun = new ShootBulletBehavior(transform.gameObject);
     }
@@ -126,6 +133,15 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Experience Gem")
+        {
+            Destroy(other.transform.gameObject);
+            GainExperience(1);
+        }
+    }
+
     // Ow! That actually hurt
     void Damage(int damage)
     {
@@ -139,7 +155,7 @@ public class PlayerBehavior : MonoBehaviour
             // Play damage sound
             if (damageSound != null)
             {
-                damageSound.Play();
+                transform.GetComponent<AudioSource>().PlayOneShot(damageSound);
             }
 
             UpdateHealth(-1 * damage);
@@ -147,14 +163,34 @@ public class PlayerBehavior : MonoBehaviour
         
         if (_playerHealth == 0) {
             Destroy(transform.gameObject);
-            _gameManager.GetComponent<GameManagerBehavior>().OnPlayerDeath();
+            _gameManager.OnPlayerDeath();
         }
     }
 
     void UpdateHealth(int change)
     {
         _playerHealth = Mathf.Clamp(_playerHealth + change, 0, _maxHealth);
-        _gameManager.GetComponent<GameManagerBehavior>().UpdatePlayerHealth(_playerHealth, _maxHealth);
+        _gameManager.UpdatePlayerHealth(_playerHealth, _maxHealth);
+    }
+
+    void GainExperience(int xpGained)
+    {
+        // Play XP sound
+        if (xpSound != null)
+        {
+            transform.GetComponent<AudioSource>().PlayOneShot(xpSound);
+        }
+
+        bool increaseDiff = false;
+        _currentXp += xpGained;
+        if(_currentXp >= _xpToNextLevel)
+        {
+            _currentXp -= _xpToNextLevel;
+            _playerLevel += 1;
+            increaseDiff = true;
+            _xpToNextLevel = _playerLevel*10 + 5;
+        }
+        _gameManager.UpdatePlayerExperience(_currentXp, _xpToNextLevel, _playerLevel, increaseDiff);
     }
 
     private IEnumerator FlashDamageCoroutine()

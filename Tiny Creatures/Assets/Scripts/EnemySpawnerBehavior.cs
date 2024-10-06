@@ -97,4 +97,9 @@ public class EnemySpawnerBehavior : MonoBehaviour
     {
         Enemy1
     }
+
+    public void IncreaseDifficulty()
+    {
+        _difficultyLevel += 1;
+    }
 }
