@@ -75,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1781201787
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ea79b51b8dd528d4ebe460580798ca12, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -101,13 +101,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerSpeed: 5
-  _dashMultiplier: 2.5
+  _dashMultiplier: 3
   _playerHealth: 100
   damageSound: {fileID: 5587551160179500860}
   damageColor: {r: 1, g: 0, b: 0, a: 1}
+  dashColor: {r: 0.09019606, g: 0.14851059, b: 0.6862745, a: 1}
   flashDuration: 0.1
   _iFrameLength: 0.5
-  _dashLength: 0.25
+  _dashLength: 0.3
   _dashCoolDown: 2.5
   _attack1: {fileID: 7474858115586984181, guid: 89c74d2e2ebf5f141851c00e5754f71b,
     type: 3}

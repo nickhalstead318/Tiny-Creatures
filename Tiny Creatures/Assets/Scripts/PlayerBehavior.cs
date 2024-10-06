@@ -22,6 +22,8 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField]
     private Color damageColor = Color.red;  // Color to flash when hit
     [SerializeField]
+    private Color dashColor = new Color(20, 20, 70); // Color to flash when dash
+    [SerializeField]
     private float flashDuration = 0.1f;     // How long the flash lasts
     private Color originalColor; // Revert to this after taking damage
 
@@ -156,11 +158,23 @@ public class PlayerBehavior : MonoBehaviour
     {
         ActivateIFrames(_dashLength);
 
-        if (!_dashActive)
-        {
-            _dashActive = true;
-            _dashTime = Time.time + _dashLength;
-        }
+        _dashActive = true;
+        _dashTime = Time.time + _dashLength;
+
+        StartCoroutine(PostDash());
+    }
+
+    IEnumerator PostDash()
+    {
+        // Turn blue during dash
+        spriteRenderer.color = dashColor;
+
+        // Length of dash
+        yield return new WaitForSeconds(_dashLength);
+
+        // Reset color
+        spriteRenderer.color = originalColor;
+
     }
 
     // Activate iframes for X seconds
