@@ -34,8 +34,6 @@ public class GameManagerBehavior : MonoBehaviour
     public Image pauseScreen;
 
     public Image tutorialMessage;
-    public Image stopSignImg;
-    public Image ability1Frame;
 
     // Start is called before the first frame update
     void Start()
@@ -131,12 +129,11 @@ public class GameManagerBehavior : MonoBehaviour
 
     IEnumerator ShowTutorialInfoCoroutine()
     {
-        PauseGame();
-        yield return new WaitForSeconds(2.0f);
-        stopSignImg.transform.parent = ability1Frame.transform;
+        _isPaused = true;
+        _musicPlayer.Pause();
+        _spawner.StopSpawning();
+        yield return new WaitForSeconds(3.0f);
         tutorialMessage.gameObject.SetActive(false);
-        stopSignImg.transform.position = new Vector3(-20, 18, 0);
-        stopSignImg.transform.localScale = Vector3.one;
         ResumeGame();
     }
 
