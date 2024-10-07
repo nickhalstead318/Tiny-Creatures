@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BulletBehavior : MonoBehaviour
 {
+    [SerializeField]
+    private Transform _firePoint;
 
     [SerializeField]
     private float _speed = 15.0f;
@@ -20,6 +22,13 @@ public class BulletBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject[] firePointObjects = GameObject.FindGameObjectsWithTag("Shoot Point");
+        if (firePointObjects != null && firePointObjects.Length == 1)
+        {
+            _firePoint = firePointObjects[0].GetComponent<Transform>();
+            transform.position = _firePoint.position;
+        }
+
         _timeToDestroy = Time.time + _lifespan;
     }
 

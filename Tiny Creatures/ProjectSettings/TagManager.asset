@@ -8,6 +8,7 @@ TagManager:
   - Manager
   - Spawner
   - Experience Gem
+  - Shoot Point
   layers:
   - Default
   - TransparentFX
