@@ -57,6 +57,8 @@ public class PlayerBehavior : MonoBehaviour
     // Player Attacks
     [SerializeField]
     private GameObject _attack1;
+    [SerializeField]
+    private SpriteRenderer _gunFlash;
 
     // Misc
     private GameManagerBehavior _gameManager;
@@ -242,7 +244,12 @@ public class PlayerBehavior : MonoBehaviour
         
         if (att1 > 0 && _attack1 != null)
         {
+            _gunFlash.enabled = true;
             FireAttack(Attacks.Attack1);
+        }
+        else
+        {
+            _gunFlash.enabled = false;
         }
     }
 
