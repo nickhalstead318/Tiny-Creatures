@@ -1882,7 +1882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b18ce367044f6d46b5c2d78324dc8d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthText: {fileID: 1485944629}
+  healthText: {fileID: 1485944630}
   healthSlider: {fileID: 1078316386}
   healthImage: {fileID: 2075988195}
   healthGradient:
@@ -1919,8 +1919,8 @@ MonoBehaviour:
   xpSlider: {fileID: 1742598371}
   _gameOverText: {fileID: 1147582780}
   _resetButton: {fileID: 1533513972}
-  currentMusic: {fileID: 1629641505}
-  _spawner: {fileID: 75231309}
+  musicSet: []
+  _spawner: {fileID: 75231310}
 --- !u!4 &1629641503
 Transform:
   m_ObjectHideFlags: 0
@@ -2548,10 +2548,20 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1774766951829366041, guid: d2dee86bc25e11143994ffed0a68dfde,
         type: 3}
+      propertyPath: xpSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 47184a44c74f42148bf6906403047a2d, type: 3}
+    - target: {fileID: 1774766951829366041, guid: d2dee86bc25e11143994ffed0a68dfde,
+        type: 3}
       propertyPath: _attack1
       value: 
       objectReference: {fileID: 1988681443819048972, guid: b0c389dcca6fafb41b52e44c993c3472,
         type: 3}
+    - target: {fileID: 1774766951829366041, guid: d2dee86bc25e11143994ffed0a68dfde,
+        type: 3}
+      propertyPath: damageSound
+      value: 
+      objectReference: {fileID: 8300000, guid: d0fe9879add742942ae9be1a5afc3328, type: 3}
     - target: {fileID: 1774766951829366041, guid: d2dee86bc25e11143994ffed0a68dfde,
         type: 3}
       propertyPath: _playerSpeed
