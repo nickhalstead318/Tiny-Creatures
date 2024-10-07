@@ -33,6 +33,10 @@ public class GameManagerBehavior : MonoBehaviour
     private bool _isPaused = false;
     public Image pauseScreen;
 
+    public Image tutorialMessage;
+    public Image stopSignImg;
+    public Image ability1Frame;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +51,7 @@ public class GameManagerBehavior : MonoBehaviour
             _musicPlayer.clip = musicSet[0];
             _musicPlayer.Play();
         }
+        StartCoroutine(ShowTutorialInfoCoroutine());
     }
 
     // Update is called once per frame
@@ -122,6 +127,17 @@ public class GameManagerBehavior : MonoBehaviour
             _musicPlayer.Play();
             _spawner.StartSpawning();
         }
+    }
+
+    IEnumerator ShowTutorialInfoCoroutine()
+    {
+        PauseGame();
+        yield return new WaitForSeconds(2.0f);
+        stopSignImg.transform.parent = ability1Frame.transform;
+        tutorialMessage.gameObject.SetActive(false);
+        stopSignImg.transform.position = new Vector3(-20, 18, 0);
+        stopSignImg.transform.localScale = Vector3.one;
+        ResumeGame();
     }
 
     public void OpenMainMenu()
