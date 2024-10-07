@@ -16,11 +16,14 @@ public class BulletBehavior : MonoBehaviour
     private float _lifespan = 1.5f;
     private float _timeToDestroy;
 
+    private GameManagerBehavior _gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
         _timeToDestroy = Time.time + _lifespan;
+
+        _gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerBehavior>();
     }
 
     public void SetDir(Vector3 dir, Vector3 fireVelocity)
@@ -31,10 +34,13 @@ public class BulletBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += (_speed * _direction) * Time.deltaTime;
-        if(Time.time >= _timeToDestroy)
+        if (!_gameManager.IsGamePaused())
         {
-            Destroy(transform.gameObject);
+            transform.position += (_speed * _direction) * Time.deltaTime;
+            if (Time.time >= _timeToDestroy)
+            {
+                Destroy(transform.gameObject);
+            }
         }
     }
 

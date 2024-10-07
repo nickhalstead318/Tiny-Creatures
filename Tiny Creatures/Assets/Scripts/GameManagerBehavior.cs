@@ -30,6 +30,9 @@ public class GameManagerBehavior : MonoBehaviour
     [SerializeField]
     private EnemySpawnerBehavior _spawner;
 
+    private bool _isPaused = false;
+    public Image pauseScreen;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -66,7 +69,7 @@ public class GameManagerBehavior : MonoBehaviour
 
     public void ResetScene()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("SampleScene");
     }
 
     public void UpdatePlayerHealth(int currHealth,int maxHealth)
@@ -85,6 +88,44 @@ public class GameManagerBehavior : MonoBehaviour
         if (increaseDiff)
         {
             _spawner.IncreaseDifficulty();
+            if(playerLevel == 3 && musicSet[1] != null)
+            {
+                _musicPlayer.Pause();
+                _musicPlayer.clip = musicSet[1];
+                _musicPlayer.Play();
+            }
         }
+    }
+
+    public bool IsGamePaused()
+    {
+        return _isPaused;
+    }
+
+    public void PauseGame()
+    {
+        if (!_isPaused)
+        {
+            _isPaused = true;
+            pauseScreen.gameObject.SetActive(true);
+            _musicPlayer.Pause();
+            _spawner.StopSpawning();
+        }
+    }
+
+    public void ResumeGame()
+    {
+        if (_isPaused)
+        {
+            _isPaused = false;
+            pauseScreen.gameObject.SetActive(false);
+            _musicPlayer.Play();
+            _spawner.StartSpawning();
+        }
+    }
+
+    public void OpenMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
     }
 }

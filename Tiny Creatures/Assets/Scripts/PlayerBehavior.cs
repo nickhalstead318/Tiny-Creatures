@@ -86,9 +86,12 @@ public class PlayerBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CalculateMovement();
+        if (!_gameManager.IsGamePaused())
+        {
+            CalculateMovement();
 
-        CalculateAttacks();
+            CalculateAttacks();
+        }
     }
 
     // Calculates everything related to movement

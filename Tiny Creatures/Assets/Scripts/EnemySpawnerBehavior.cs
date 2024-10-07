@@ -71,7 +71,7 @@ public class EnemySpawnerBehavior : MonoBehaviour
         StartCoroutine(_spawnRoutine);
     }
 
-    void StopSpawning()
+    public void StopSpawning()
     {
         StopCoroutine(_spawnRoutine);
     }

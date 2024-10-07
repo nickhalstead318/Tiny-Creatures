@@ -15,18 +15,23 @@ abstract public class EnemyBehavior : MonoBehaviour
     protected int health;
     protected int totalXP;
     private GameObject _experienceGem;
+    private GameManagerBehavior _gameManager;
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
         _playerObject = GameObject.FindGameObjectWithTag("Player");
         _experienceGem = GameObject.FindGameObjectWithTag("Spawner").GetComponent<EnemySpawnerBehavior>().experienceGem;
+        _gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerBehavior>();
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        Move();
+        if (!_gameManager.IsGamePaused())
+        {
+            Move();
+        }
     }
 
     protected virtual void Move()
