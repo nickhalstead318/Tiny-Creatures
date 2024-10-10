@@ -60,6 +60,7 @@ public class PlayerBehavior : MonoBehaviour
 
     // Misc
     private GameManagerBehavior _gameManager;
+    private PlayerAbilityBehavior _playerAbilities;
 
     // Debug
     private AbilityBehavior _fireGun;
@@ -77,8 +78,9 @@ public class PlayerBehavior : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         originalColor = spriteRenderer.color;
 
-        // Add reference to Game Manager
+        // Reference to other scripts
         _gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerBehavior>();
+        _playerAbilities = transform.GetComponent<PlayerAbilityBehavior>();
 
         _fireGun = new ShootBulletBehavior(transform.gameObject);
     }
@@ -90,7 +92,7 @@ public class PlayerBehavior : MonoBehaviour
         {
             CalculateMovement();
 
-            CalculateAttacks();
+            //CalculateAttacks();
         }
     }
 
@@ -240,29 +242,11 @@ public class PlayerBehavior : MonoBehaviour
         {
             return;
         }
-
-        float att1 = Input.GetAxis("Fire1");
-        
-        if (att1 > 0 && _attack1 != null)
-        {
-            FireAttack(Attacks.Attack1);
-        }
     }
 
     enum Attacks
     {
         Attack1
-    }
-
-    void FireAttack(Attacks attack)
-    {
-        switch(attack)
-        {
-            case Attacks.Attack1:
-                _fireGun.TryToActivate(_attack1);
-                break;
-            default: break;
-        }
     }
     
     public float CalcCurrentSpeed()

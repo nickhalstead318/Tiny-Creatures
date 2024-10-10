@@ -1,60 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 abstract public class AbilityBehavior
 {
     protected GameObject _playerObject;
     protected float _cooldown;
-    protected float _maxCooldown;
     protected float _lastActivation = -1000f;
+
+    protected string _animationFilePath;
+    protected GameObject _animationPrefab;
+
+    protected string _abilityFrameFilePath;
+    protected GameObject _abilityFramePrefab;
 
     public AbilityBehavior(GameObject playerObject)
     {
         _playerObject = playerObject;
     }
 
-    protected virtual void Activate()
+    public virtual void Activate()
     {
         
     }
 
-    protected virtual void Activate(GameObject abilityObject)
+    public virtual void Activate(GameObject abilityObject)
     {
          
     }
 
-    public bool TryToActivate(GameObject abilityObject)
+    public float GetCooldown()
     {
-        if (CanActivate())
-        {
-            if(abilityObject == null)
-            {
-                Activate();
-            }
-            else
-            {
-                Activate(abilityObject);
-            }
-            _lastActivation = Time.time;
-            return true;
-        }
-
-        return false;
+        return _cooldown;
     }
 
-    public virtual bool CanActivate()
+    protected void LoadImages()
     {
-        if(Time.time >= _lastActivation + _cooldown)
+        if(_animationFilePath != null)
         {
-            return true;
+            Addressables.LoadAssetAsync<GameObject>(_animationFilePath).Completed += handle =>
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    _animationPrefab = handle.Result; // Store the animation GameObject
+                }
+            };
         }
-        return false;
-    }
-
-    protected void SetInitialCooldown(float cooldown)
-    {
-        _maxCooldown = cooldown;
-        _cooldown = _maxCooldown;
+        if (_abilityFrameFilePath != null)
+        {
+            Addressables.LoadAssetAsync<GameObject>(_abilityFrameFilePath).Completed += handle =>
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    _abilityFramePrefab = handle.Result; // Store the animation GameObject
+                }
+            };
+        }
     }
 }

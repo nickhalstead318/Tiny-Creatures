@@ -6,10 +6,12 @@ public class ShootBulletBehavior : AbilityBehavior
 {
     public ShootBulletBehavior(GameObject playerObject) : base(playerObject)
     {
-        SetInitialCooldown(0.1f);
+        _cooldown = 0.5f;
+        _animationFilePath = "Assets/Prefab/Bullet.prefab";
+        LoadImages();
     }
 
-    protected override void Activate(GameObject abilityObject)
+    public override void Activate()
     {
         Vector3 mouseScreenPosition = Input.mousePosition;
 
@@ -30,7 +32,7 @@ public class ShootBulletBehavior : AbilityBehavior
         
         Vector3 spawnLocation = directionToMouse + _playerObject.transform.position;
 
-        GameObject bullet = GameObject.Instantiate(abilityObject, spawnLocation, Quaternion.identity);
+        GameObject bullet = GameObject.Instantiate(_animationPrefab, spawnLocation, Quaternion.identity);
         int spriteLayer = LayerMask.NameToLayer("Sprites");
         bullet.layer = spriteLayer;
 

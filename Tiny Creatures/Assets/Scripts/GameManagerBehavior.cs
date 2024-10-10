@@ -35,6 +35,10 @@ public class GameManagerBehavior : MonoBehaviour
 
     public Image tutorialMessage;
 
+    public Slider ability1CooldownSlider;
+    public TextMeshProUGUI ability1CooldownText;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +59,7 @@ public class GameManagerBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void OnPlayerDeath()
@@ -75,7 +79,7 @@ public class GameManagerBehavior : MonoBehaviour
         SceneManager.LoadScene("SampleScene");
     }
 
-    public void UpdatePlayerHealth(int currHealth,int maxHealth)
+    public void UpdatePlayerHealth(int currHealth, int maxHealth)
     {
         healthText.text = currHealth + "/" + maxHealth;
         healthSlider.maxValue = maxHealth;
@@ -83,7 +87,7 @@ public class GameManagerBehavior : MonoBehaviour
         healthImage.color = healthGradient.Evaluate(healthSlider.normalizedValue);
     }
 
-    public void UpdatePlayerExperience(int currXp,int xpToNextLevel, int playerLevel, bool increaseDiff)
+    public void UpdatePlayerExperience(int currXp, int xpToNextLevel, int playerLevel, bool increaseDiff)
     {
         playerLevelText.text = "Level " + playerLevel;
         xpSlider.maxValue = xpToNextLevel;
@@ -91,7 +95,7 @@ public class GameManagerBehavior : MonoBehaviour
         if (increaseDiff)
         {
             _spawner.IncreaseDifficulty();
-            if(playerLevel == 3 && musicSet[1] != null)
+            if (playerLevel == 3 && musicSet[1] != null)
             {
                 _musicPlayer.Pause();
                 _musicPlayer.clip = musicSet[1];
@@ -125,6 +129,29 @@ public class GameManagerBehavior : MonoBehaviour
             _musicPlayer.Play();
             _spawner.StartSpawning();
         }
+    }
+
+    public void CooldownUpdate(PlayerAbilityBehavior.Ability ability, float timeLeft, float maxTime)
+    {
+        switch (ability)
+        {
+            case PlayerAbilityBehavior.Ability.Ability1:
+                if(timeLeft > 0)
+                {
+                    if (!ability1CooldownSlider.gameObject.activeSelf)
+                    {
+                        ability1CooldownSlider.gameObject.SetActive(true);
+                    }
+                    ability1CooldownText.text = Mathf.Round(timeLeft).ToString();
+                    ability1CooldownSlider.maxValue = maxTime;
+                    ability1CooldownSlider.value = timeLeft;
+                }
+                else if (ability1CooldownSlider.gameObject.activeSelf) {
+                    ability1CooldownSlider.gameObject.SetActive(false);
+                }
+                break;
+        }
+        
     }
 
     IEnumerator ShowTutorialInfoCoroutine()
