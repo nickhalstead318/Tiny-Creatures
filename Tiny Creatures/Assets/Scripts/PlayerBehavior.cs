@@ -11,7 +11,7 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField]
     private float _playerSpeed = 5.0f; // Speed of player
     [SerializeField]
-    private float _dashMultiplier = 2.5f; // Speed multiplier
+    private Vector2 _playerMovement; // Speed of player
     [SerializeField]
     private int _maxHealth = 100;
     [SerializeField]
@@ -39,20 +39,19 @@ public class PlayerBehavior : MonoBehaviour
     // Status Effects
     // Is player currently invincible / dashing
     private bool _iFrameActive = false;
-    private bool _dashActive = false;
+    public bool dashActive = false;
 
     // Time in (s)econds iframe/dash ends from game start
     private float _iFrameTime;
-    private float _dashTime;
-
-    private float _dashTimeStart = 0; // Time in (s)econds dash can be activated again from game start
 
     [SerializeField]
     private float _iFrameLength = 0.5f; // Length of iframes in (s)econds
-    public float _dashLength = 0.05f; // Length of dash in (s)econds
-    public float _dashCoolDown = 3.0f; // Length of dash cooldown in (s)econds
 
-    private Vector3 _currentVelocity;
+    // Dash
+    [SerializeField]
+    private float _dashMultiplier = 2.5f;
+    [SerializeField]
+    private float _dashLength = 0.3f; // Length of dash in (s)econds
 
     // Player Attacks
     [SerializeField]
@@ -61,9 +60,6 @@ public class PlayerBehavior : MonoBehaviour
     // Misc
     private GameManagerBehavior _gameManager;
     private PlayerAbilityBehavior _playerAbilities;
-
-    // Debug
-    private AbilityBehavior _fireGun;
 
     // Start is called before the first frame update
     void Start()
@@ -81,8 +77,6 @@ public class PlayerBehavior : MonoBehaviour
         // Reference to other scripts
         _gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerBehavior>();
         _playerAbilities = transform.GetComponent<PlayerAbilityBehavior>();
-
-        _fireGun = new ShootBulletBehavior(transform.gameObject);
     }
 
     // Update is called once per frame
@@ -99,32 +93,20 @@ public class PlayerBehavior : MonoBehaviour
     // Calculates everything related to movement
     private void CalculateMovement()
     {
-        float xDir = Input.GetAxis("Horizontal");
-        float yDir = Input.GetAxis("Vertical");
-
-        // If not dashing, player tries to dash, and not on cooldown
-        if (!_dashActive && Input.GetAxis("Jump") > 0 && Time.time > _dashTimeStart)
-        {
-            ActivateDash();
-        }
-
-        float currentSpeed = CalcCurrentSpeed();
-        _currentVelocity = (xDir * Vector3.right + yDir * Vector3.up) * currentSpeed * Time.deltaTime;
-        Vector3 newPos = transform.position + _currentVelocity;
-        transform.position = Mathf.Clamp(newPos.x, -34, 24) * Vector3.right + Mathf.Clamp(newPos.y, -24, 34) * Vector3.up;
-
-        //transform.position += (xDir * Vector3.right + yDir * Vector3.up) * currentSpeed * Time.deltaTime;
-
+        _playerMovement.x = Input.GetAxisRaw("Horizontal");
+        _playerMovement.y = Input.GetAxisRaw("Vertical");
 
         if (_iFrameActive && _iFrameTime <= Time.time)
         {
             _iFrameActive = false;
         }
+    }
 
-        if (_dashActive && _dashTime <= Time.time)
+    private void FixedUpdate()
+    {
+        if (!_gameManager.IsGamePaused() && !dashActive)
         {
-            _dashActive = false;
-            _dashTimeStart = Time.time + _dashCoolDown;
+            transform.GetComponent<Rigidbody2D>().velocity = _playerMovement * _playerSpeed;
         }
     }
 
@@ -172,6 +154,28 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
+    public void Dash()
+    {
+        StartCoroutine(DashRoutine(transform.gameObject));
+    }
+
+    private IEnumerator DashRoutine(GameObject player)
+    {
+        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+        Vector2 originalVelocity = rb.velocity;
+        dashActive = true;
+        ActivateIFrames(_dashLength);
+        spriteRenderer.color = dashColor;
+
+        rb.velocity *= _dashMultiplier;
+
+        yield return new WaitForSeconds(_dashLength);
+
+        rb.velocity = originalVelocity; // Reset to the original speed
+        spriteRenderer.color = originalColor;
+        dashActive = false;
+    }
+
     void UpdateHealth(int change)
     {
         _playerHealth = Mathf.Clamp(_playerHealth + change, 0, _maxHealth);
@@ -205,30 +209,6 @@ public class PlayerBehavior : MonoBehaviour
         spriteRenderer.color = originalColor;
     }
 
-    // This activates the player's dash
-    void ActivateDash()
-    {
-        ActivateIFrames(_dashLength);
-
-        _dashActive = true;
-        _dashTime = Time.time + _dashLength;
-
-        StartCoroutine(PostDash());
-    }
-
-    IEnumerator PostDash()
-    {
-        // Turn blue during dash
-        spriteRenderer.color = dashColor;
-
-        // Length of dash
-        yield return new WaitForSeconds(_dashLength);
-
-        // Reset color
-        spriteRenderer.color = originalColor;
-
-    }
-
     // Activate iframes for X seconds
     void ActivateIFrames(float frameLength)
     {
@@ -236,23 +216,9 @@ public class PlayerBehavior : MonoBehaviour
         _iFrameTime = Time.time + frameLength;
     }
 
-    void CalculateAttacks()
-    {
-        if (_currentVelocity.sqrMagnitude > 0)
-        {
-            return;
-        }
-    }
-
     enum Attacks
     {
         Attack1
-    }
-    
-    public float CalcCurrentSpeed()
-    {
-        float currentBoost = Mathf.Max(1, Convert.ToInt32(_dashActive) * _dashMultiplier);
-        return currentBoost * _playerSpeed;
     }
 
     // Getters

@@ -24,16 +24,16 @@ public class PlayerAbilityBehavior : MonoBehaviour
         _playerBehavior = transform.GetComponent<PlayerBehavior>();
         _playerObject = transform.gameObject;
 
-        //Reference to Prefabs
-        //Addressables.LoadAssetAsync<GameObject>("Assets/Prefab/Bullet.prefab");
-
+        // Set up starting abilities
         _currentAbilities = new Dictionary<Ability, AbilityBehavior>
         {
-            { Ability.Ability1, new ShootBulletBehavior(_playerObject) }
+            { Ability.Ability1, new ShootBulletBehavior(_playerObject) },
+            { Ability.Dash, new DashBehavior(_playerObject) },
         };
         _currentCooldowns = new Dictionary<Ability, float>
         {
-            { Ability.Ability1, 0 }
+            { Ability.Ability1, 0 },
+            { Ability.Dash, 0 },
         };
     }
 
@@ -45,13 +45,23 @@ public class PlayerAbilityBehavior : MonoBehaviour
             TickDownCooldowns();
 
             // Ability 1
-            float att1 = Input.GetAxis("Fire1");
+            float ability1 = Input.GetAxis("Fire1");
 
-            if (att1 > 0 && CanActivate(Ability.Ability1))
+            if (ability1 > 0 && CanActivate(Ability.Ability1))
             {
                 AbilityBehavior abilityBehavior = _currentAbilities[Ability.Ability1];
                 abilityBehavior.Activate();
                 _currentCooldowns[Ability.Ability1] = abilityBehavior.GetCooldown();
+            }
+
+            // Dash
+            float dash = Input.GetAxis("Jump");
+
+            if (dash > 0 && CanActivate(Ability.Dash))
+            {
+                AbilityBehavior abilityBehavior = _currentAbilities[Ability.Dash];
+                abilityBehavior.Activate();
+                _currentCooldowns[Ability.Dash] = abilityBehavior.GetCooldown();
             }
         }
     }
@@ -61,7 +71,7 @@ public class PlayerAbilityBehavior : MonoBehaviour
         foreach (Ability ability in _currentCooldowns.Keys.ToList())
         {
             _currentCooldowns[ability] = Mathf.Max(0, _currentCooldowns[ability]-Time.deltaTime);
-            _gameManager.CooldownUpdate(Ability.Ability1, _currentCooldowns[ability], _currentAbilities[Ability.Ability1].GetCooldown());
+            _gameManager.CooldownUpdate(ability, _currentCooldowns[ability], _currentAbilities[ability].GetCooldown());
         }
     }
 
@@ -76,6 +86,7 @@ public class PlayerAbilityBehavior : MonoBehaviour
 
     public enum Ability
     {
-        Ability1
+        Ability1,
+        Dash
     }
 }

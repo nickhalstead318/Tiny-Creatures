@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6309408
 RectTransform:
   m_ObjectHideFlags: 0
@@ -761,7 +761,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2367,7 +2367,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1102901050
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2606,8 +2606,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6309408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -0.00000022351742, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3500,7 +3500,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1535256545
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3812,6 +3812,10 @@ MonoBehaviour:
   _spawner: {fileID: 75231310}
   pauseScreen: {fileID: 1619292213}
   tutorialMessage: {fileID: 416224053}
+  ability1CooldownSlider: {fileID: 6309409}
+  ability1CooldownText: {fileID: 1535256546}
+  dashCooldownSlider: {fileID: 1102901051}
+  dashCooldownText: {fileID: 1815561148}
 --- !u!4 &1629641503
 Transform:
   m_ObjectHideFlags: 0
@@ -3839,7 +3843,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.645
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4382,7 +4386,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1815561147
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4758,8 +4762,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1102901050}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -0.00000022351742, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5086,6 +5090,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355665028509868671, guid: d2dee86bc25e11143994ffed0a68dfde,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2928385259008719912, guid: d2dee86bc25e11143994ffed0a68dfde,
         type: 3}

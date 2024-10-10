@@ -38,6 +38,8 @@ public class GameManagerBehavior : MonoBehaviour
     public Slider ability1CooldownSlider;
     public TextMeshProUGUI ability1CooldownText;
 
+    public Slider dashCooldownSlider;
+    public TextMeshProUGUI dashCooldownText;
 
     // Start is called before the first frame update
     void Start()
@@ -136,22 +138,31 @@ public class GameManagerBehavior : MonoBehaviour
         switch (ability)
         {
             case PlayerAbilityBehavior.Ability.Ability1:
-                if(timeLeft > 0)
-                {
-                    if (!ability1CooldownSlider.gameObject.activeSelf)
-                    {
-                        ability1CooldownSlider.gameObject.SetActive(true);
-                    }
-                    ability1CooldownText.text = Mathf.Round(timeLeft).ToString();
-                    ability1CooldownSlider.maxValue = maxTime;
-                    ability1CooldownSlider.value = timeLeft;
-                }
-                else if (ability1CooldownSlider.gameObject.activeSelf) {
-                    ability1CooldownSlider.gameObject.SetActive(false);
-                }
+                AdjustCooldownSliders(ability1CooldownSlider, ability1CooldownText, timeLeft, maxTime);
+                break;
+            case PlayerAbilityBehavior.Ability.Dash:
+                AdjustCooldownSliders(dashCooldownSlider, dashCooldownText, timeLeft, maxTime);
                 break;
         }
         
+    }
+
+    private void AdjustCooldownSliders(Slider cooldownSlider, TextMeshProUGUI cooldownText, float timeLeft, float maxTime)
+    {
+        if (timeLeft > 0)
+        {
+            if (!cooldownSlider.gameObject.activeSelf)
+            {
+                cooldownSlider.gameObject.SetActive(true);
+            }
+            cooldownText.text = Mathf.Round(timeLeft).ToString();
+            cooldownSlider.maxValue = maxTime;
+            cooldownSlider.value = timeLeft;
+        }
+        else if (cooldownSlider.gameObject.activeSelf)
+        {
+            cooldownSlider.gameObject.SetActive(false);
+        }
     }
 
     IEnumerator ShowTutorialInfoCoroutine()
