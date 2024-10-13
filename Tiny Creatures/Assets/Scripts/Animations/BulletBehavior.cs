@@ -30,7 +30,6 @@ public class BulletBehavior : MonoBehaviour
         if (_fireVelocity.sqrMagnitude == 0 && _rigidBody.velocity.sqrMagnitude != 0)
         {
             _fireVelocity = _rigidBody.velocity;
-            Debug.Log("Made it");
         }
 
         if (!_gameManager.IsGamePaused())
