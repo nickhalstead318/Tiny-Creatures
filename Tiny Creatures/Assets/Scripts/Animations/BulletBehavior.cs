@@ -6,12 +6,12 @@ public class BulletBehavior : MonoBehaviour
 {
 
     [SerializeField]
-    private int _damage = 5;
+    private int _damage = 2;
 
-    private Vector3 _direction;
-    private Vector3 _fireVelocity;
+    private Vector2 _fireVelocity;
     private float _lifespan = 1.5f;
     private float _timeLeftToDestroy;
+    private Rigidbody2D _rigidBody;
 
     private GameManagerBehavior _gameManager;
 
@@ -21,19 +21,25 @@ public class BulletBehavior : MonoBehaviour
         _timeLeftToDestroy = _lifespan;
 
         _gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerBehavior>();
-    }
-
-    public void SetDir(Vector3 dir, Vector3 fireVelocity)
-    {
-        _direction = dir;
+        _rigidBody = transform.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (_fireVelocity.sqrMagnitude == 0 && _rigidBody.velocity.sqrMagnitude != 0)
+        {
+            _fireVelocity = _rigidBody.velocity;
+            Debug.Log("Made it");
+        }
+
         if (!_gameManager.IsGamePaused())
         {
-            //transform.position += (_speed * _direction) * Time.deltaTime;
+            if(_rigidBody.velocity.sqrMagnitude == 0)
+            {
+                _rigidBody.velocity = _fireVelocity;
+            }
+
             if (_timeLeftToDestroy <= 0)
             {
                 Destroy(transform.gameObject);
@@ -42,6 +48,10 @@ public class BulletBehavior : MonoBehaviour
             {
                 _timeLeftToDestroy -= Time.deltaTime;
             }
+        }
+        else
+        {
+            _rigidBody.velocity = Vector2.zero;
         }
     }
 

@@ -26,7 +26,7 @@ public class ShootBulletBehavior : AbilityBehavior
         bullet.transform.Rotate(0, 0, (Mathf.Rad2Deg*Mathf.Atan2(directionToMouse.y, directionToMouse.x)-90f));
 
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
-        bulletRb.velocity = directionToMouse * 15.0f;
+        bulletRb.velocity = directionToMouse * 20.0f;
         bulletRb.velocity += _playerObject.GetComponent<Rigidbody2D>().velocity;
     }
 }

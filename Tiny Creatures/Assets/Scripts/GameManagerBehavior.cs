@@ -38,6 +38,9 @@ public class GameManagerBehavior : MonoBehaviour
     public Slider ability1CooldownSlider;
     public TextMeshProUGUI ability1CooldownText;
 
+    public Slider ability2CooldownSlider;
+    public TextMeshProUGUI ability2CooldownText;
+
     public Slider dashCooldownSlider;
     public TextMeshProUGUI dashCooldownText;
 
@@ -139,6 +142,9 @@ public class GameManagerBehavior : MonoBehaviour
         {
             case PlayerAbilityBehavior.Ability.Ability1:
                 AdjustCooldownSliders(ability1CooldownSlider, ability1CooldownText, timeLeft, maxTime);
+                break;
+            case PlayerAbilityBehavior.Ability.Ability2:
+                AdjustCooldownSliders(ability2CooldownSlider, ability2CooldownText, timeLeft, maxTime);
                 break;
             case PlayerAbilityBehavior.Ability.Dash:
                 AdjustCooldownSliders(dashCooldownSlider, dashCooldownText, timeLeft, maxTime);

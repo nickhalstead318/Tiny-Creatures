@@ -16,6 +16,8 @@ abstract public class EnemyBehavior : MonoBehaviour
     protected int totalXP;
     private GameObject _experienceGem;
     private GameManagerBehavior _gameManager;
+    protected Rigidbody2D _rigidBody;
+    protected bool _canMove = true;
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -23,14 +25,25 @@ abstract public class EnemyBehavior : MonoBehaviour
         _playerObject = GameObject.FindGameObjectWithTag("Player");
         _experienceGem = GameObject.FindGameObjectWithTag("Spawner").GetComponent<EnemySpawnerBehavior>().experienceGem;
         _gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerBehavior>();
+
+        _rigidBody = transform.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (!_gameManager.IsGamePaused())
+        
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        if (!_gameManager.IsGamePaused() && _canMove)
         {
             Move();
+        }
+        else if (_gameManager.IsGamePaused())
+        {
+            _rigidBody.velocity = Vector2.zero;
         }
     }
 
@@ -39,7 +52,8 @@ abstract public class EnemyBehavior : MonoBehaviour
         if (_playerObject != null)
         {
             Vector3 diffVector =  _playerObject.transform.position - transform.position;
-            transform.position += (diffVector.normalized) * Time.deltaTime * _speed;
+
+            _rigidBody.velocity = diffVector.normalized * _speed;
         }
     }
 
@@ -59,5 +73,18 @@ abstract public class EnemyBehavior : MonoBehaviour
             }
             Destroy(transform.gameObject);
         }
+    }
+
+    public void Halt(float timeDelay)
+    {
+        StartCoroutine(PauseMovement(timeDelay));
+    }
+
+    protected IEnumerator PauseMovement(float timeDelay)
+    {
+        _canMove = false;
+        yield return new WaitForSeconds(timeDelay);
+
+        _canMove = true;
     }
 }

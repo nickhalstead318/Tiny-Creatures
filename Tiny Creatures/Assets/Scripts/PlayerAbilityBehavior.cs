@@ -21,19 +21,21 @@ public class PlayerAbilityBehavior : MonoBehaviour
     {
         // Reference to other scripts
         _gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerBehavior>();
-        _playerBehavior = transform.GetComponent<PlayerBehavior>();
-        _playerObject = transform.gameObject;
+        _playerBehavior = gameObject.GetComponent<PlayerBehavior>();
+        _playerObject = gameObject;
 
         // Set up starting abilities
         _currentAbilities = new Dictionary<Ability, AbilityBehavior>
         {
             { Ability.Ability1, new ShootBulletBehavior(_playerObject) },
             { Ability.Dash, new DashBehavior(_playerObject) },
+            { Ability.Ability2, new SplashPushbackBehavior(_playerObject) },
         };
         _currentCooldowns = new Dictionary<Ability, float>
         {
             { Ability.Ability1, 0 },
             { Ability.Dash, 0 },
+            { Ability.Ability2, 0 },
         };
     }
 
@@ -52,6 +54,16 @@ public class PlayerAbilityBehavior : MonoBehaviour
                 AbilityBehavior abilityBehavior = _currentAbilities[Ability.Ability1];
                 abilityBehavior.Activate();
                 _currentCooldowns[Ability.Ability1] = abilityBehavior.GetCooldown();
+            }
+
+            // Ability 2
+            float ability2 = Input.GetAxis("Fire2");
+
+            if (ability2 > 0 && CanActivate(Ability.Ability2))
+            {
+                AbilityBehavior abilityBehavior = _currentAbilities[Ability.Ability2];
+                abilityBehavior.Activate();
+                _currentCooldowns[Ability.Ability2] = abilityBehavior.GetCooldown();
             }
 
             // Dash
@@ -87,6 +99,7 @@ public class PlayerAbilityBehavior : MonoBehaviour
     public enum Ability
     {
         Ability1,
-        Dash
+        Ability2,
+        Dash,
     }
 }

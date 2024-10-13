@@ -108,6 +108,10 @@ public class PlayerBehavior : MonoBehaviour
         {
             transform.GetComponent<Rigidbody2D>().velocity = _playerMovement * _playerSpeed;
         }
+        else if(_gameManager.IsGamePaused())
+        {
+            transform.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        }
     }
 
     // What happens when things go bump in the night?

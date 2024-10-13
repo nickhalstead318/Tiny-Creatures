@@ -8,8 +8,8 @@ public class EnemySpawnerBehavior : MonoBehaviour
     private int _difficultyMax = 1;
 
     [SerializeField]
-    private float _timeBetweenSpawns = 1f;
-    public float distFromPlayer = 10f;
+    private float _timeBetweenSpawns = 3f;
+    public float distFromPlayer = 12f;
 
     private GameObject _playerObject;
     private Dictionary<Enemies, GameObject> _enemies;

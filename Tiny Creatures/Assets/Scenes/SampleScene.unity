@@ -309,8 +309,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d31fb4b3fd6596c49a311241ba572f9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timeBetweenSpawns: 2
-  distFromPlayer: 8
+  _timeBetweenSpawns: 3
+  distFromPlayer: 12
   experienceGem: {fileID: 2011984043425960851, guid: ed2cf1b34e3a0474583bfdb9f580e58e,
     type: 3}
   _enemiesList:
@@ -3814,6 +3814,8 @@ MonoBehaviour:
   tutorialMessage: {fileID: 416224053}
   ability1CooldownSlider: {fileID: 6309409}
   ability1CooldownText: {fileID: 1535256546}
+  ability2CooldownSlider: {fileID: 1673051100}
+  ability2CooldownText: {fileID: 893654109}
   dashCooldownSlider: {fileID: 1102901051}
   dashCooldownText: {fileID: 1815561148}
 --- !u!4 &1629641503
@@ -4351,7 +4353,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e55c782475dd68645ac06b0b1855272d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d7bc10dff7350f1498a14674dfb04087, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
