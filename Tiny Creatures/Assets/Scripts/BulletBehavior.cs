@@ -6,22 +6,19 @@ public class BulletBehavior : MonoBehaviour
 {
 
     [SerializeField]
-    private float _speed = 15.0f;
-
-    [SerializeField]
     private int _damage = 5;
 
     private Vector3 _direction;
     private Vector3 _fireVelocity;
     private float _lifespan = 1.5f;
-    private float _timeToDestroy;
+    private float _timeLeftToDestroy;
 
     private GameManagerBehavior _gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        _timeToDestroy = Time.time + _lifespan;
+        _timeLeftToDestroy = _lifespan;
 
         _gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManagerBehavior>();
     }
@@ -36,10 +33,14 @@ public class BulletBehavior : MonoBehaviour
     {
         if (!_gameManager.IsGamePaused())
         {
-            transform.position += (_speed * _direction) * Time.deltaTime;
-            if (Time.time >= _timeToDestroy)
+            //transform.position += (_speed * _direction) * Time.deltaTime;
+            if (_timeLeftToDestroy <= 0)
             {
                 Destroy(transform.gameObject);
+            }
+            else
+            {
+                _timeLeftToDestroy -= Time.deltaTime;
             }
         }
     }
